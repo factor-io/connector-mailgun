@@ -61,10 +61,7 @@ Factor::Connector.service 'mailgun_messages' do
         priority: 0,
         description: 'Factor.io Mailgun Connector listener',
         expression: filter,
-        action: [
-          "forward(#{hook_url})",
-          "stop()"
-          ]
+        action: [ "forward(#{hook_url})" ]
       }
 
       base_url     = "https://api.mailgun.net/v2/routes"
