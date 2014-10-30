@@ -36,7 +36,7 @@ Factor::Connector.service 'mailgun_messages' do
     action_callback response
   end
 
-  listener 'receive'
+  listener 'receive' do
     start do |params|
       api_key = params['api_key']
       filter = params['filter'] || 'catch_all()'
@@ -57,6 +57,8 @@ Factor::Connector.service 'mailgun_messages' do
         end
       end
 
+      info "Starting webhook listener at #{hook_url}"
+
       content = {
         priority: 0,
         description: 'Factor.io Mailgun Connector listener',
@@ -69,6 +71,7 @@ Factor::Connector.service 'mailgun_messages' do
       uri.user     = 'api'
       uri.password = api_key
 
+      info "Registering webhook with Mailgun"
       begin
         response = JSON.parse(RestClient.post(uri.to_s, content))
       rescue => ex
