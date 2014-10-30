@@ -1,3 +1,8 @@
+[![Test Coverage](https://codeclimate.com/github/factor-io/connector-mailgun/badges/coverage.svg)](https://codeclimate.com/github/factor-io/connector-mailgun)
+[![Build Status](https://travis-ci.org/factor-io/connector-mailgun.svg?branch=master)](https://travis-ci.org/factor-io/connector-mailgun)
+[![Dependency Status](https://gemnasium.com/factor-io/connector-mailgun.svg)](https://gemnasium.com/factor-io/connector-mailgun)
+[![Gem Version](https://badge.fury.io/rb/factor-connector-mailgun.png)](http://badge.fury.io/rb/factor-connector-mailgun)
+
 Factor.io Mailgun Connector
 ======================
 
