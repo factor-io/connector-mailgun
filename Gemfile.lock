@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     factor-connector-mailgun (0.0.3)
-      factor-connector-api (~> 0.0.13)
+      factor-connector-api (~> 0.0.14)
       rest-client (~> 1.7.2)
 
 GEM
@@ -10,17 +10,17 @@ GEM
   specs:
     celluloid (0.16.0)
       timers (~> 4.0.0)
-    codeclimate-test-reporter (0.4.1)
+    codeclimate-test-reporter (0.4.5)
       simplecov (>= 0.7.1, < 1.0.0)
     diff-lcs (1.2.5)
     docile (1.1.5)
-    factor-connector-api (0.0.13)
+    factor-connector-api (0.0.14)
       celluloid (~> 0.16.0)
     hitimes (1.2.2)
     mime-types (2.4.3)
     multi_json (1.10.1)
-    netrc (0.8.0)
-    rake (10.3.2)
+    netrc (0.10.2)
+    rake (10.4.2)
     rest-client (1.7.2)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
@@ -48,7 +48,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  codeclimate-test-reporter (~> 0.4.1)
+  codeclimate-test-reporter (~> 0.4.5)
   factor-connector-mailgun!
-  rake (~> 10.3.2)
+  rake (~> 10.4.2)
   rspec (~> 3.1.0)
