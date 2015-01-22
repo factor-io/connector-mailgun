@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    factor-connector-mailgun (0.0.3)
+    factor-connector-mailgun (0.0.4)
       factor-connector-api (~> 0.0.14)
       rest-client (~> 1.7.2)
 
