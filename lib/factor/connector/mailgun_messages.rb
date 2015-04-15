@@ -4,38 +4,6 @@ require 'rest-client'
 
 Factor::Connector.service 'mailgun_messages' do
 
-  action 'send' do |params|
-    domain  = params['domain']
-    api_key = params['api_key']
-    to      = params['to']
-    from    = params['from']
-    subject = params['subject']
-    message = params['message']
-
-
-    fail 'Domain (domain) is required' unless domain
-    fail 'API Key (api_key) is required' unless api_key
-    fail 'To (to) is required' unless to
-    fail 'Subject (subject) is required' unless subject
-    fail 'Message (message) is required' unless message
-
-    base_url     = "https://api.mailgun.net/v2/#{domain}"
-    uri          = URI(base_url)
-    uri.path     = uri.path + "/messages"
-    uri.user     = 'api'
-    uri.password = api_key
-
-    content = { from: from, to: to, subject: subject, text: message }
-
-    begin
-      response = JSON.parse(RestClient.post(uri.to_s, content))
-    rescue => ex
-      fail "Failed to connect to mailgun server: #{ex.message}"
-    end
-
-    action_callback response
-  end
-
   listener 'receive' do
     start do |params|
       api_key = params['api_key']
@@ -48,7 +16,7 @@ Factor::Connector.service 'mailgun_messages' do
           info 'Recevied a hook call'
 
           headers = {}
-          JSON.parse(hook_data.delete('message_headers')).map do |header|
+          JSON.parse(hook_data.delete('message_headers'), symbolize_names: true).map do |header|
             headers[header.first] = header.last
           end
           hook_data['headers'] = headers
@@ -73,7 +41,7 @@ Factor::Connector.service 'mailgun_messages' do
 
       info "Registering webhook with Mailgun"
       begin
-        response = JSON.parse(RestClient.post(uri.to_s, content))
+        response = JSON.parse(RestClient.post(uri.to_s, content), symbolize_names: true)
       rescue => ex
         fail "Failed to connect to mailgun server: #{ex.message}"
       end
@@ -92,7 +60,7 @@ Factor::Connector.service 'mailgun_messages' do
       uri.password = api_key
 
       begin
-        response = JSON.parse(RestClient.delete(uri.to_s))
+        response = JSON.parse(RestClient.delete(uri.to_s), symbolize_names: true)
       rescue => ex
         fail "Failed to connect to mailgun server: #{ex.message}"
       end
