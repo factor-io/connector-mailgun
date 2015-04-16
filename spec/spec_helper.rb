@@ -14,4 +14,15 @@ RSpec.configure do |c|
     @domain  = ENV['MAILGUN_DOMAIN']
     @runtime = Factor::Connector::Runtime.new(MailgunConnectorDefinition)
   end
+
+  def send_email(options={})
+    to      = options[:to] || "test@#{@domain}"
+    from    = options[:from] || "test@#{@domain}"
+    subject = options[:subject] || "test"
+    text    = options[:text] || options[:message] || "test messgae"
+    client  = Mailgun::Client.new @api_key
+    content = { from: from, to: to, subject: subject, text: message }
+
+    client.send_message(@domain, content)
+  end
 end
