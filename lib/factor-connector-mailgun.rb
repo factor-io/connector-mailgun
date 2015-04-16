@@ -3,6 +3,7 @@ require 'factor/connector/runtime'
 
 require 'rest-client'
 require 'uri'
+require 'websockethook'
 
 class MailgunConnectorDefinition < Factor::Connector::Definition
 
