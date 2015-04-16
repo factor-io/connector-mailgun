@@ -21,7 +21,8 @@ class MailgunConnectorDefinition < Factor::Connector::Definition
     value
   end
   def to_response(client_response)
-    client_response.to_h.inject({}){|m,(k,v)| m[k.to_sym] = v; m}
+    to_parse = client_response.is_a?(Hash) ? client_response : client_response.to_h
+    to_parse.inject({}){|m,(k,v)| m[k.to_sym] = v; m}
   end
 
   resource :message do
@@ -63,23 +64,27 @@ class MailgunConnectorDefinition < Factor::Connector::Definition
               info "Received hook"
               trigger post[:data]
             when 'registered'
-              hook_url = post[:data][:url]
-              content = {
-                priority: 0,
-                description: 'Factor.io Mailgun Connector listener',
-                expression: filter,
-                action: [ "forward('#{hook_url}')" ]
-              }
-              info "Registering webhook '#{hook_url}' with Mailgun"
-              
               begin
-                response = to_response(client.post('routes',content))
+                hook_url = post[:data][:url]
+                content = {
+                  priority: 0,
+                  description: 'Factor.io Mailgun Connector listener',
+                  expression: filter,
+                  action: [ "forward('#{hook_url}')" ]
+                }
+                info "Registering webhook '#{hook_url}' with Mailgun"
+                
+                begin
+                  response = to_response(client.post('routes',content))
+                rescue => ex
+                  fail "Failed to connect to mailgun server: #{ex.message}"
+                end
+                route_id = response[:route]['id']
+                info "Registered Mailgun route: #{route_id}"
+                respond to_response(response)
               rescue => ex
-                fail "Failed to connect to mailgun server: #{ex.message}"
+                fail ex.message
               end
-              route_id = response[:route]['id']
-              info "Registered Mailgun route: #{route_id}"
-              respond to_response(response)
             when 'open'
               info "Web hook status: #{post[:type]}"
             when 'restart'
